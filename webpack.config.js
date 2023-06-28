@@ -9,13 +9,27 @@ module.exports = {
     clean: true,
   },
   resolve: {
-    extensions: [".js"]
+    extensions: [".js", ".jsx"]
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "public/index.html")
     })
   ],
+  module: {
+    rules: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            cacheDirectory: true
+          }
+        }
+      }
+    ]
+  },
   optimization: {
     splitChunks: {
       cacheGroups: {
