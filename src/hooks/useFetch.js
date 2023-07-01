@@ -5,9 +5,9 @@ export function useFetch(url) {
   const [isLoading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
-  const fetchData = async (url, params) => {
+  async function fetchData(url, params) {
     setLoading(true)
-    
+
     const response = await fetch(
       params ? `${url}?${new URLSearchParams(params)}` : url
     )
@@ -27,7 +27,7 @@ export function useFetch(url) {
   }, [])
 
   async function refetch({ params }) {
-    fetchData(url, params)
+    await fetchData(url, params)
   }
 
   return {
