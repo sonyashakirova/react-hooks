@@ -3,7 +3,6 @@ import { useLocalStorage } from "./hooks/useLocalStorage"
 export function App() {
   const [token, { setItem, removeItem }] = useLocalStorage("token")
 
-  console.log("render")
   return (
     <div>
       <p>
