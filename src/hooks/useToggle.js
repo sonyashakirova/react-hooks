@@ -1,28 +1,38 @@
-import { useState } from "react"
+import { useReducer } from "react"
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "boolean":
+      return typeof action.payload === "boolean"
+        ? action.payload
+        : !state
+    case "array":
+      return action.payload 
+        ? action.array.includes(action.payload)
+          ? action.payload : state
+          : action.array.indexOf(state) === action.array.length - 1
+            ? action.array[0]
+            : action.array[action.array.indexOf(state) + 1]
+    default:
+      return state
+  }
+}
 
 export function useToggle(initialValue) {
-  const [state, setState] = useState(() => {
-    if (Array.isArray(initialValue)) return initialValue[0]
-
-    return initialValue ?? true
-  })
+  const initialState = Array.isArray(initialValue) ? initialValue[0] : initialValue ?? true;
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   function toggle(value) {
     if (Array.isArray(initialValue)) {
-      if (value && initialValue.includes(value)) {
-        setState(value)
-      } else if (!value) {
-        setState((prevState) => {
-          const index = initialValue.indexOf(prevState)
-
-          return index === initialValue.length - 1
-            ? initialValue[0] : initialValue[index + 1]
-        })
-      }
+      dispatch({
+        type: "array",
+        payload: value,
+        array: initialValue
+      })
     } else {
-      setState((prevState) => {
-        return typeof value === "boolean"
-          ? value : !prevState
+      dispatch({
+        type: "boolean",
+        payload: value
       })
     }
   }
